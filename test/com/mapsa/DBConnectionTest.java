@@ -4,7 +4,11 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -23,6 +27,37 @@ public class DBConnectionTest {
     @Test
     public void openConnection() throws SQLException {
         dbConnection.openConnection();
+    }
+
+//    @Test
+//    public void testQuery() throws SQLException {
+//        Statement statement = dbConnection.getConnection().createStatement();
+//        ResultSet resultSet = statement.executeQuery("select  * from CUSTOMER");
+//        while (resultSet.next()) {
+//            System.out.println(resultSet.getObject("ID"));
+//            System.out.println(resultSet.getObject("FIRST_NAME"));
+//            System.out.println(resultSet.getObject("LASTNAME"));
+//            System.out.println("------------------------------------------");
+//        }
+//    }
+
+    @Test
+    public void findToObject() throws SQLException {
+        Statement statement = dbConnection.getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery("select  * from CUSTOMER");
+
+        List<Customer> customerList = new ArrayList<>();
+        while (resultSet.next()) {
+            Customer customer = new Customer();
+            customer.setId(resultSet.getInt(1));
+            customer.setFirstName(resultSet.getString(2));
+            customer.setLastName(resultSet.getString(3));
+            customerList.add(customer);
+        }
+
+        for (Customer customer:customerList) {
+            System.out.println(customer);
+        }
     }
 
     @AfterClass

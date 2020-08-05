@@ -1,5 +1,6 @@
 package com.mapsa;
 
+import junit.framework.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,14 +21,15 @@ public class DBConnectionTest {
     private static DBConnection dbConnection;
 
     @BeforeClass
-    public static void beforeClass() {
+    public static void beforeClass() throws SQLException {
         dbConnection = new DBConnection();
-    }
-
-    @Test
-    public void openConnection() throws SQLException {
         dbConnection.openConnection();
     }
+
+//    @Test
+//    public void openConnection() throws SQLException {
+//        dbConnection.openConnection();
+//    }
 
 //    @Test
 //    public void testQuery() throws SQLException {
@@ -41,24 +43,41 @@ public class DBConnectionTest {
 //        }
 //    }
 
+//    @Test
+//    public void findToObject() throws SQLException {
+//        Statement statement = dbConnection.getConnection().createStatement();
+//        ResultSet resultSet = statement.executeQuery("select  * from CUSTOMER");
+//
+//        List<Customer> customerList = new ArrayList<>();
+//        while (resultSet.next()) {
+//            Customer customer = new Customer();
+//            customer.setId(resultSet.getInt(1));
+//            customer.setFirstName(resultSet.getString(2));
+//            customer.setLastName(resultSet.getString(3));
+//            customerList.add(customer);
+//        }
+//
+//        for (Customer customer : customerList) {
+//            System.out.println(customer);
+//        }
+//    }
+
     @Test
-    public void findToObject() throws SQLException {
+    public void update() throws SQLException {
         Statement statement = dbConnection.getConnection().createStatement();
-        ResultSet resultSet = statement.executeQuery("select  * from CUSTOMER");
+        int affectedRos = statement.executeUpdate("update CUSTOMER set FIRST_NAME='hasanghli' where ID=1");
 
-        List<Customer> customerList = new ArrayList<>();
-        while (resultSet.next()) {
-            Customer customer = new Customer();
-            customer.setId(resultSet.getInt(1));
-            customer.setFirstName(resultSet.getString(2));
-            customer.setLastName(resultSet.getString(3));
-            customerList.add(customer);
-        }
-
-        for (Customer customer:customerList) {
-            System.out.println(customer);
-        }
+        Assert.assertEquals(1, affectedRos);
+        dbConnection.getConnection().commit();
     }
+//    @Test
+//    public void update() throws SQLException {
+//        Statement statement = dbConnection.getConnection().createStatement();
+//        int affectedRos = statement.executeUpdate("update CUSTOMER set FIRST_NAME='hasanghli' where ID=1");
+//        Assert.assertEquals(1, affectedRos);
+//        dbConnection.getConnection().commit();
+//
+//    }
 
     @AfterClass
     public static void afterClass() throws SQLException {
